@@ -1,0 +1,77 @@
+############################################
+# Maven / Build
+############################################
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+############################################
+# Logs
+############################################
+*.log
+logs/
+
+############################################
+# OS Files
+############################################
+.DS_Store
+Thumbs.db
+
+############################################
+# IDEs
+############################################
+
+### VS Code ###
+.vscode/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse / STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+############################################
+# Environment / Secrets (VERY IMPORTANT)
+############################################
+.env
+*.env
+application-secrets.yml
+application-local.yml
+
+############################################
+# Redis / temp files (optional)
+############################################
+*.rdb
+dump.rdb
+
+############################################
+# Node (if frontend ever added)
+############################################
+node_modules/
+dist/
+
+############################################
+# Misc
+############################################
+*.tmp
+*.swp
