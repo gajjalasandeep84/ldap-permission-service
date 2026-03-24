@@ -1,5 +1,6 @@
 package com.example.useraccess.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.useraccess.dto.PermissionRequest;
@@ -23,13 +24,15 @@ public class UserAccessController {
 
 	@PostMapping("/summary")
 	@Operation(summary = "Get user summary", description = "Returns permission count for user based on roles and user mappings")
-	public SummaryResponse getSummary(@RequestBody PermissionRequest request) {
-		return permissionService.getSummary(request.getEnv(), request.getUserId(), request.getRoles());
+	public ResponseEntity<SummaryResponse> getSummary(@RequestBody PermissionRequest request) {
+		return ResponseEntity
+				.ok(permissionService.getSummary(request.getEnv(), request.getUserId(), request.getRoles()));
 	}
 
 	@PostMapping("/permissions")
-	@Operation(summary = "Get user permissions", description = "Returns full permission list derived from roles + user-specific mappings")
-	public PermissionResponse getPermissions(@RequestBody PermissionRequest request) {
-		return permissionService.getPermissions(request.getEnv(), request.getUserId(), request.getRoles());
+	@Operation(summary = "Get user permissions", description = "Returns full permission list derived from roles and user-specific mappings")
+	public ResponseEntity<PermissionResponse> getPermissions(@RequestBody PermissionRequest request) {
+		return ResponseEntity
+				.ok(permissionService.getPermissions(request.getEnv(), request.getUserId(), request.getRoles()));
 	}
 }

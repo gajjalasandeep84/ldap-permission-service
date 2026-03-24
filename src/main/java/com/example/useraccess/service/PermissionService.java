@@ -2,7 +2,9 @@ package com.example.useraccess.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +17,9 @@ import com.example.useraccess.repository.PermissionRepositoryCustom;
 
 @Service
 public class PermissionService {
+
+	private static final String SOURCE_EFFECTIVE_ACCESS = "EFFECTIVE_ACCESS";
+	private static final String CACHE_EMPTY_ROLES = "NO_ROLES";
 
 	private final PermissionRepositoryCustom permissionRepository;
 
@@ -40,22 +45,36 @@ public class PermissionService {
 	}
 
 	public String buildRolesCacheKey(List<String> roles) {
-		return normalizeRoles(roles).stream().collect(Collectors.joining("|"));
+		List<String> normalizedRoles = normalizeRoles(roles);
+		if (normalizedRoles.isEmpty()) {
+			return CACHE_EMPTY_ROLES;
+		}
+		return String.join("|", normalizedRoles);
 	}
 
 	private List<String> normalizeRoles(List<String> roles) {
-		if (roles == null) {
+		if (roles == null || roles.isEmpty()) {
 			return List.of();
 		}
 
-		return new ArrayList<>(roles).stream().filter(role -> role != null && !role.isBlank()).map(String::trim)
-				.sorted(Comparator.naturalOrder()).toList();
+		Set<String> deduped = new LinkedHashSet<>();
+
+		for (String role : roles) {
+			if (role != null) {
+				String trimmed = role.trim();
+				if (!trimmed.isBlank()) {
+					deduped.add(trimmed);
+				}
+			}
+		}
+
+		return new ArrayList<>(deduped).stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
 	}
 
 	private PermissionItem toPermissionItem(String permissionName) {
 		PermissionItem item = new PermissionItem();
 		item.setName(permissionName);
-		item.setSource("EFFECTIVE_ACCESS");
+		item.setSource(SOURCE_EFFECTIVE_ACCESS);
 		item.setRiskLevel(determineRiskLevel(permissionName));
 		return item;
 	}
