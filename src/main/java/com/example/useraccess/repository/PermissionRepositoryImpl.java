@@ -72,6 +72,7 @@ public class PermissionRepositoryImpl implements PermissionRepositoryCustom {
 				    ) permissions
 				    ORDER BY permission
 				""";
+	}
 
 		Query query = entityManager.createNativeQuery(sql);
 		query.setParameter(ROLE_NAME_PARAM_KEY, role);
